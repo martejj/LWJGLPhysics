@@ -63,7 +63,7 @@ public class Canvas {
 
         //} // the stack frame is popped automatically
 
-        glfwSetWindowPos(window, 100,100);
+        glfwSetWindowPos(window, 20,20);
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
@@ -85,7 +85,7 @@ public class Canvas {
 
     }
 
-    public void destroy() {
+    private void destroy() {
 
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);

@@ -1,8 +1,8 @@
 #version 120
 
-uniform int red;
-uniform int green;
-uniform int blue;
+uniform float red;
+uniform float green;
+uniform float blue;
 
 
 void main() {

@@ -96,6 +96,25 @@ public class Shader {
     }
 
     /**
+     * @param name name of uniform/shader property to change
+     * @param value float value to set it to
+     */
+    public void setUniform(String name, float value) {
+
+        int location = glGetUniformLocation(program, name);
+
+        if (location == -1) {
+
+            System.out.println("Cannot find uniform " + name + " in " + filename);
+
+            System.exit(1);
+        }
+
+        glUniform1f(location, value);
+
+    }
+
+    /**
      * @param name uniform/shader property to change
      * @param value matrix value to change it to
      */
@@ -118,7 +137,7 @@ public class Shader {
 
     }
 
-    public void setColour(int red, int green, int blue) {
+    public void setColour(float red, float green, float blue) {
 
         setUniform("red", red);
         setUniform("green", green);

@@ -5,6 +5,7 @@ import com.game.graphics.Renderer;
 
 public class GamestateMainMenu extends Gamestate{
 
+    // Placeholder class for a main menu, currently just goes straight to game
     @Override
     public void update(Game game) {
         game.changeState(new GamestatePhysicsSandbox());

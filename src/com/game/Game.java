@@ -93,4 +93,15 @@ public class Game {
 
     }
 
+    public int getInitialHeight() {
+
+        return renderer.getInitialHeight();
+
+    }
+
+    public int getInitialWidth() {
+
+        return renderer.getInitialWidth();
+
+    }
 }
