@@ -11,12 +11,12 @@ import static org.lwjgl.opengl.GL15.*;
 public class Model {
 
     // OpenGL ID for verticies in memory
-    int vID;
+    private int vID;
 
     // OpenGL ID for indicies in memory
-    int iID;
+    private int iID;
 
-    int drawCount;
+    private int drawCount;
 
     public Model(float[] vertices, int[] indices) {
 

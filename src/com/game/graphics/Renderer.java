@@ -1,5 +1,6 @@
 package com.game.graphics;
 
+import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -52,7 +53,7 @@ public class Renderer {
 
         rectangle = new Model(vertices, indices);
 
-        // Setup the transformation stack.
+        // Setup the transformation stack. TODO
 
         transformStack = new Stack<>();
 
@@ -62,19 +63,34 @@ public class Renderer {
 
     }
 
-    public void drawRectangle(int width, int height, int x, int y, Colour colour) {
+    /**
+     * Draws a filled rectangle
+     * @param width of the rectangle
+     * @param height of the rectangle
+     * @param x of the centre of the rectangle
+     * @param y of the centre of the rectangle
+     * @param colour RGB colour value
+     * @param angle rotation in radians in the x-y plane anticlockwise
+     */
+
+    public void drawRectangle(double width, double height, double x, double y, Colour colour, double angle) {
 
         // pushTransform(new Matrix4f().identity().scale(x, y, 1));
         Matrix4f projection = new Matrix4f()
-                .ortho2D(-x, this.getInitialWidth() - x, -y, this.getInitialHeight() - y);
+                .ortho2D((float) -x, (float) (this.getInitialWidth() - x), (float) -y, (float) (this.getInitialHeight() - y));
 
-        Matrix4f scale = new Matrix4f().scaling(width, height, 1);
+        Matrix4f scale = new Matrix4f().scaling((float) width, (float) height, 1);
+
+        Matrix4f rotation = new Matrix4f().rotation(new AxisAngle4f().rotate((float) angle));
 
         shader.bind();
-        //shader.setColour(colour.red, colour.green, colour.blue);
-        shader.setColour(1f, 1f, 0f);
-        shader.setUniform("projection", projection); // should be performed on gcard
+
+        shader.setColour(colour.red, colour.green, colour.blue);
+
+        shader.setUniform("projection", projection);
         shader.setUniform("scale", scale);
+        shader.setUniform("rotation", rotation);
+
         rectangle.render();
 
         // popTransform();

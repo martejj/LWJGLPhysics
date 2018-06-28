@@ -71,6 +71,7 @@ public class Game {
 
         if (!states.containsKey(state.getID())) {
 
+            System.out.println("iniitalising : " + state.getName());
             initState(state);
 
         }
@@ -81,7 +82,7 @@ public class Game {
             this.state.unload(this);
         }
 
-        this.state = state;
+        this.state = states.get(state.getID());
 
     }
 

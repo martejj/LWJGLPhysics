@@ -2,36 +2,73 @@ package com.game.world;
 
 import com.game.Game;
 import com.game.graphics.Renderer;
-import org.joml.AxisAngle4f;
+import com.game.world.objects.Rectangle;
+import com.game.world.objects.WorldObject;
 import org.joml.Matrix4f;
+import org.joml.Vector2d;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class World {
 
     Matrix4f cameraPosition;
 
+    ArrayList<WorldObject> objects;
+
+    Rectangle rectangle;
+
+    public World() {
+
+        objects = new ArrayList<>();
+
+
+    }
+
+    public void load(Game game) {
+
+        objects.add(new Rectangle(100, 50, new Vector2d(150, 150)));
+
+    }
+
     public void update(Game game) {
 
-        // Set origin as bottom left
-        cameraPosition = new Matrix4f().ortho2D(0, game.getInitialWidth(), 0, game.getInitialHeight());
+        for (var object : objects) {
+
+            // needs to be done just before velocity is updated
+            Vector2d collision = object.getBoxCollisionVertex(game.getInitialWidth(), 0, game.getInitialWidth(), 0);
+
+            if (collision != null) {
+
+
+
+            }
+
+            object.update(this);
+
+        }
 
     }
 
     public void render(Renderer renderer) {
 
-        renderer.pushTransform(cameraPosition);
+        for (var object : objects) {
 
-        Matrix4f projection = new Matrix4f()
-                .ortho2D(0, renderer.getInitialWidth(), 0, renderer.getInitialHeight());
+            object.render(renderer);
 
-        Matrix4f scale = new Matrix4f().scale(50).rotate(new AxisAngle4f((float) (Math.PI/4), 0, 0, 1));
+        }
 
-        renderer.shader.bind();
-        renderer.shader.setColour(1, 1,0);
-        renderer.shader.setUniform("projection", projection.mul(scale));
-        renderer.rectangle.render();
-        renderer.shader.setUniform("projection", projection.mul(scale).invert());
+    }
 
-        //renderer.popTransform(cameraPosition);
+    public static boolean isColliding(WorldObject object1, WorldObject object2) {
+
+        ArrayList<Vector2d> object1Vertices = object1.getPositionVertices();
+
+        ArrayList<Vector2d> object2Vertices = object2.getPositionVertices();
+
+
+        return true;
+
     }
 
 }
