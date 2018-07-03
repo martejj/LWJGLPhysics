@@ -26,6 +26,7 @@ public class Rectangle extends  WorldObject {
         this.dimensions.x = width;
         this.dimensions.y = height;
 
+        // VERY specificly stored in a counter clockwise manner.
         this.verticies.add(new Vector2d(+ width/2, + height/2));
         this.verticies.add(new Vector2d(- width/2, + height/2));
         this.verticies.add(new Vector2d(- width/2, - height/2));

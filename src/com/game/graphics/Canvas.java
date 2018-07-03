@@ -38,7 +38,7 @@ public class Canvas {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(width, height, "LWJGL Physics", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -48,22 +48,7 @@ public class Canvas {
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
 
-        // Get the thread stack and push a new frame
-        ///try ( MemoryStack stack = stackPush() ) {
-            //IntBuffer pWidth = stack.mallocInt(1); // int*
-            //IntBuffer pHeight = stack.mallocInt(1); // int*
-
-            // Get the window size passed to glfwCreateWindow
-            //glfwGetWindowSize(window, pWidth, pHeight);
-
-            // Get the resolution of the primary monitor
-            //GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-            // Center the window
-
-        //} // the stack frame is popped automatically
-
-        glfwSetWindowPos(window, 20,20);
+        glfwSetWindowPos(window, 40,40);
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
