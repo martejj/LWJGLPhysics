@@ -2,13 +2,11 @@ package com.game.graphics;
 
 import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
-import org.joml.Vector2d;
-import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.Stack;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -53,7 +51,7 @@ public class Renderer {
 
         shader = new Shader("shader");
 
-        rectangle = new Model(vertices, indices);
+        rectangle = new Model(vertices, indices, GL11.GL_TRIANGLES);
 
         // Setup the transformation stack. TODO
 
@@ -65,8 +63,9 @@ public class Renderer {
 
 
         // Code for testing polygon factory
-
+        /*
         ArrayList<Vector2d> vectors = new ArrayList<>();
+
 
         vectors.add(new Vector2d(1,1));
         vectors.add(new Vector2d(1,-1));
@@ -74,6 +73,7 @@ public class Renderer {
         vectors.add(new Vector2d(-1,-1));
 
         Model square = ConvexPolygonModelFactory.makeModel(vectors);
+        */
 
     }
 
@@ -122,7 +122,7 @@ public class Renderer {
 
         shader.bind();
 
-        shader.setColour(colour.red, colour.green, colour.blue);
+        shader.setColour(colour);
 
         shader.setUniform("projection", projection);
         shader.setUniform("scale", scale);
@@ -130,6 +130,26 @@ public class Renderer {
 
         model.render();
 
+    }
+
+    public void drawModel(Colour colour, Model model) {
+
+        Matrix4f projection = new Matrix4f()
+                .ortho2D(0, (float) this.getInitialWidth(), 0, (float) this.getInitialHeight());
+
+        Matrix4f scale = new Matrix4f().identity();
+
+        Matrix4f rotation = new Matrix4f().identity();
+
+        shader.bind();
+
+        shader.setColour(colour);
+
+        shader.setUniform("projection", projection);
+        shader.setUniform("scale", scale);
+        shader.setUniform("rotation", rotation);
+
+        model.render();
     }
 
     public int getCurrentWidth() {
@@ -175,14 +195,6 @@ public class Renderer {
         } // the stack frame is popped automatically
 
         return  height;
-
-    }
-
-    public void render(Model model) {
-
-        shader.setUniform("projection", currentTransformation);
-
-        model.render();
 
     }
 

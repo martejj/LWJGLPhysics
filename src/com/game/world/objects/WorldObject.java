@@ -1,12 +1,12 @@
 package com.game.world.objects;
 
+import com.game.graphics.Colour;
 import com.game.graphics.Renderer;
 import com.game.world.World;
 import org.joml.*;
 
 import java.lang.Math;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class WorldObject {
 
@@ -15,6 +15,8 @@ public class WorldObject {
     Vector2d velocity;
 
     Vector2d force;
+
+    Colour colour;
 
     ArrayList<Vector2d> verticies;
 
@@ -38,10 +40,12 @@ public class WorldObject {
     public WorldObject(double mass, Vector2d position) {
 
         this.position = position;
-        velocity = new Vector2d();
-        force = new Vector2d();
+        this.velocity = new Vector2d();
+        this.force = new Vector2d();
 
-        verticies = new ArrayList<>();
+        this. verticies = new ArrayList<>();
+
+        this.colour = new Colour();
 
         this.mass = mass;
 

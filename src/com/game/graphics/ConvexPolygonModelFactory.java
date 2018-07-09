@@ -2,6 +2,7 @@ package com.game.graphics;
 
 import com.game.utils.VectorUtils;
 import org.joml.Vector2d;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class ConvexPolygonModelFactory {
 
         // Find the maximum vertex so we can normalise the remainder of the vectors to it.
         // We need them to be on a scale of 0 to 1.
-        ArrayList<Vector2d> normalisedVectors = VectorUtils.normaliseToMax(vectors);
+        ArrayList<Vector2d> normalisedVectors = VectorUtils.normaliseVectors(vectors);
 
         if (normalisedVectors == null || !isConvex(vectors)) {
 
@@ -45,6 +46,8 @@ public class ConvexPolygonModelFactory {
             vertices[index + 1] = (float) normalisedVertex.y;
             vertices[index + 2] = 0; // 2D model so z is 0.
 
+            //System.out.println(normalisedVertex.x + " " + normalisedVertex.y);
+
             index += 3; // move to next vertex index
 
         }
@@ -53,26 +56,32 @@ public class ConvexPolygonModelFactory {
         // Each means there will be a new triangle which in turn has 3 vertices (so it needs 3 indices.
         int[] indices = new int[vectors.size() * 3]; // size*3 as there will be that many triangles
 
-        for (int curr = 1; curr < vectors.size(); curr++) {
+        for (int curr = 1; curr < (vectors.size() + 1); curr++) {
 
             // form a triangle between the vertices described in the float array vertices
-            indices[curr] = curr; // Starts at +1 as vertices[0] is (0, 0).
+            indices[curr*3 - 3] = curr; // Starts at +1 as vertices[0] is (0, 0).
+
+            //System.out.print(curr + " ");
 
             if (curr + 1 > vectors.size()) {
 
-                indices[curr*3 + 1] = 1; // Wrap back around
+                indices[curr*3 + 1 - 3] = 1; // Wrap back around
+                //System.out.print("1 ");
 
             } else {
 
-                indices[curr*3 + 1] = curr + 1;
-
+                indices[curr*3 + 1 - 3] = curr + 1;
+                //System.out.print(curr + 1 + " ");
             }
-
-            indices[curr*3 + 2] = 0; // always zero as the triangle connects to the origin (which is stored at index 0)
+            //System.out.println("0 ");
+            indices[curr*3 + 2 - 3] = 0; // always zero as the triangle connects to the origin (which is stored at index 0)
 
         }
 
-        return new Model(vertices, indices);
+        //System.out.println(Arrays.toString(vertices));
+        //System.out.println(Arrays.toString(indices));
+
+        return new Model(vertices, indices, GL11.GL_TRIANGLES);
 
     }
 

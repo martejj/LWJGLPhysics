@@ -18,7 +18,12 @@ public class Model {
 
     private int drawCount;
 
-    public Model(float[] vertices, int[] indices) {
+    // GL_* mode, e.g. GL_TRIANGLES for polygons
+    private int mode;
+
+    public Model(float[] vertices, int[] indices, int mode) {
+
+        this.mode = mode;
 
         drawCount = indices.length;
 
@@ -48,7 +53,7 @@ public class Model {
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iID);
         // Draw the triangles described by the vertices and indices
-        glDrawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT, 0);
+        glDrawElements(this.mode, drawCount, GL_UNSIGNED_INT, 0);
 
         // Clear the bindings so they are not edited
         glBindBuffer(GL_ARRAY_BUFFER, 0);

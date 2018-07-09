@@ -10,8 +10,6 @@ public class Rectangle extends  WorldObject {
 
     Vector2i dimensions;
 
-    Colour colour;
-
     public static final double density = 10;
 
     public Rectangle(int width, int height, Vector2d position) {

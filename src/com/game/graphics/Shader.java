@@ -145,6 +145,14 @@ public class Shader {
 
     }
 
+    public void setColour(Colour colour) {
+
+        setUniform("red", colour.getRed());
+        setUniform("green", colour.getGreen());
+        setUniform("blue",  colour.getBlue());
+
+    }
+
     /**
      * Call when intending rendering this shader
      */

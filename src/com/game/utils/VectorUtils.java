@@ -67,41 +67,29 @@ public class VectorUtils {
 
     }
 
-    public static ArrayList<Vector2d> normaliseToMax(ArrayList<Vector2d> vectors) {
-
-        Vector2d maxVertex = null;
-
-        double maxMagnitude = 0;
-
-        for (var vertex : vectors) {
-
-            double magnitude = VectorUtils.getMagnitude(vertex);
-
-            if (magnitude > maxMagnitude) {
-
-                maxMagnitude = magnitude;
-
-                maxVertex = vertex;
-
-            }
-
-        }
-
-        if (maxVertex == null) {
-
-            return null;
-
-        }
+    public static ArrayList<Vector2d> normaliseVectors(ArrayList<Vector2d> vectors) {
 
         ArrayList<Vector2d> normalisedVectors = new ArrayList<>();
 
         for (var vector : vectors) {
 
-            normalisedVectors.add(new Vector2d(vector).normalize(maxVertex));
+            normalisedVectors.add(new Vector2d(vector).normalize());
 
         }
 
         return normalisedVectors;
+
+    }
+
+    public static Vector2d getVectorFromAngle(double angle) {
+
+        Vector2d ret = new Vector2d();
+
+        ret.x = Math.cos(angle);
+
+        ret.y = Math.sin(angle);
+
+        return ret;
 
     }
 
