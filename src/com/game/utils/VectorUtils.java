@@ -1,7 +1,9 @@
 package com.game.utils;
 
 import org.joml.Vector2d;
+import org.joml.Vector2i;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class VectorUtils {
@@ -62,6 +64,44 @@ public class VectorUtils {
     public static boolean isSameDirection (Vector2d u, Vector2d v) {
 
         return u.x/v.x == u.y/v.y;
+
+    }
+
+    public static ArrayList<Vector2d> normaliseToMax(ArrayList<Vector2d> vectors) {
+
+        Vector2d maxVertex = null;
+
+        double maxMagnitude = 0;
+
+        for (var vertex : vectors) {
+
+            double magnitude = VectorUtils.getMagnitude(vertex);
+
+            if (magnitude > maxMagnitude) {
+
+                maxMagnitude = magnitude;
+
+                maxVertex = vertex;
+
+            }
+
+        }
+
+        if (maxVertex == null) {
+
+            return null;
+
+        }
+
+        ArrayList<Vector2d> normalisedVectors = new ArrayList<>();
+
+        for (var vector : vectors) {
+
+            normalisedVectors.add(new Vector2d(vector).normalize(maxVertex));
+
+        }
+
+        return normalisedVectors;
 
     }
 

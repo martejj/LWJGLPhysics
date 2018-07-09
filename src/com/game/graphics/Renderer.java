@@ -2,11 +2,13 @@ package com.game.graphics;
 
 import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
+import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.Stack;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -61,6 +63,18 @@ public class Renderer {
 
         transformStack.push(currentTransformation);
 
+
+        // Code for testing polygon factory
+
+        ArrayList<Vector2d> vectors = new ArrayList<>();
+
+        vectors.add(new Vector2d(1,1));
+        vectors.add(new Vector2d(1,-1));
+        vectors.add(new Vector2d(-1,1));
+        vectors.add(new Vector2d(-1,-1));
+
+        Model square = ConvexPolygonModelFactory.makeModel(vectors);
+
     }
 
     /**
@@ -94,6 +108,27 @@ public class Renderer {
         rectangle.render();
 
         // popTransform();
+
+    }
+
+    public void drawModel(double width, double height, double x, double y, Colour colour, double angle, Model model) {
+
+        Matrix4f projection = new Matrix4f()
+                .ortho2D((float) -x, (float) (this.getInitialWidth() - x), (float) -y, (float) (this.getInitialHeight() - y));
+
+        Matrix4f scale = new Matrix4f().scaling((float) width, (float) height, 1);
+
+        Matrix4f rotation = new Matrix4f().rotation(new AxisAngle4f().rotate((float) angle));
+
+        shader.bind();
+
+        shader.setColour(colour.red, colour.green, colour.blue);
+
+        shader.setUniform("projection", projection);
+        shader.setUniform("scale", scale);
+        shader.setUniform("rotation", rotation);
+
+        model.render();
 
     }
 
