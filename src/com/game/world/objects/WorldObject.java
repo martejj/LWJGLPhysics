@@ -70,37 +70,6 @@ public class WorldObject {
 
     }
 
-    /**
-     *
-     * @param xMax the maximum left distance
-     * @param xMin the minimum right distance
-     * @param yMax the maximum height
-     * @param yMin the minimum height e.g. bottom of the world
-     * @return The point on the object where the collision will occur
-     */
-
-    public Vector2d getBoxCollisionBoxVertex(double xMax, double xMin, double yMax, double yMin) {
-
-        ArrayList<Vector2d> points = getPositionVertices();
-
-        for (var point : points) {
-
-            if (point.x < xMin || point.x > xMax) {
-
-                return point;
-
-            } else if (point.y < yMin || point.y > yMax) {
-
-                return point;
-
-            }
-
-        }
-
-        return null;
-
-    }
-
     public ArrayList<Vector2d> getPositionVertices() {
 
         if (this.positionVertices != null) {

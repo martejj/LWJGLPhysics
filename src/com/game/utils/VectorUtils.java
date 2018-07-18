@@ -93,4 +93,24 @@ public class VectorUtils {
 
     }
 
+    public static Vector2d getCentre(ArrayList<Vector2d> vertices) {
+
+        Vector2d retVertex = new Vector2d();
+
+        for (var vertex : vertices) {
+
+            retVertex.x += vertex.x;
+
+            retVertex.y += vertex.y;
+
+        }
+
+        retVertex.x /= vertices.size();
+
+        retVertex.y /= vertices.size();
+
+        return retVertex;
+
+    }
+
 }

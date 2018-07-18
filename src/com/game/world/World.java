@@ -5,12 +5,14 @@ import com.game.graphics.Colour;
 import com.game.graphics.LineCollectionModelFactory;
 import com.game.graphics.Model;
 import com.game.graphics.Renderer;
+import com.game.states.ui.input.PolygonCreator;
 import com.game.utils.VectorUtils;
 import com.game.world.objects.Polygon;
 import com.game.world.objects.Rectangle;
 import com.game.world.objects.WorldObject;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
+import org.joml.Vector2dc;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,8 @@ public class World {
 
     Model line;
 
+    PolygonCreator creator;
+
     public World() {
 
         objects = new ArrayList<>();
@@ -33,31 +37,40 @@ public class World {
 
     public void load(Game game) {
 
+        // Rectangle Test
         objects.add(new Rectangle(100, 50, new Vector2d(150, 150)));
 
-        ArrayList<Vector2d> vectors = new ArrayList<>();
-        vectors.add(new Vector2d(-50, 50));
-        vectors.add(new Vector2d(-50, -50));
-        vectors.add(new Vector2d(50, -50));
-        vectors.add(new Vector2d(50, 50));
+        // Square polygon Test
+        ArrayList<Vector2d> vectors = new ArrayList<>(4);
+        vectors.add(new Vector2d(-1,  1));
+        vectors.add(new Vector2d(-1, -1));
+        vectors.add(new Vector2d(1, -1));
+        vectors.add(new Vector2d(1,  1));
 
-        objects.add(new Polygon(10, new Vector2d(300, 500), vectors));
+        objects.add(new Polygon(new Vector2d(100, 100),10, new Vector2d(300, 500), vectors));
 
-        ArrayList<Vector2d> vectors2 = new ArrayList<>();
+        // Pentagon polygon Test
+        ArrayList<Vector2d> vectors2 = new ArrayList<>(5);
         vectors2.add(VectorUtils.getVectorFromAngle(2*Math.PI*(1)/5));
         vectors2.add(VectorUtils.getVectorFromAngle(2*Math.PI*(2)/5));
         vectors2.add(VectorUtils.getVectorFromAngle(2*Math.PI*(3)/5));
         vectors2.add(VectorUtils.getVectorFromAngle(2*Math.PI*(4)/5));
         vectors2.add(VectorUtils.getVectorFromAngle(2*Math.PI*(5)/5));
 
-        objects.add(new Polygon(10, new Vector2d(800, 400), vectors2));
+        objects.add(new Polygon(new Vector2d(100, 100), 10, new Vector2d(800, 400), vectors2));
 
+        // Line collection Test
         ArrayList<Vector2d> vectors3 = new ArrayList<>();
         vectors3.add(new Vector2d(100, 100));
         vectors3.add(new Vector2d(200, 300));
         vectors3.add(new Vector2d(200, 100));
 
         line = LineCollectionModelFactory.makeModel(vectors3, true);
+
+        creator = new PolygonCreator();
+
+        creator.init(game);
+
     }
 
     public void update(Game game) {
@@ -65,6 +78,14 @@ public class World {
         for (var object : objects) {
 
             object.update(this);
+
+        }
+
+        if (creator.isFinished()) {
+
+            ArrayList<Vector2d> vertices = creator.stop(game);
+
+            objects.add(new Polygon(new Vector2d(100, 100), 10, VectorUtils.getCentre(vertices), vertices));
 
         }
 
@@ -78,7 +99,9 @@ public class World {
 
         }
 
-        renderer.drawModel(new Colour(0, 1, 1), line);
+        renderer.drawModel(new Colour(0, 1, 0), line);
+
+        creator.render(renderer);
 
     }
 

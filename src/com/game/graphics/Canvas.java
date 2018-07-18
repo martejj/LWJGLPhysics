@@ -1,7 +1,9 @@
 package com.game.graphics;
 
 import org.lwjgl.Version;
+import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;

@@ -33,8 +33,7 @@ public class LineCollectionModelFactory {
 
         }
 
-        // Describes the index positions of the vertices of the lines
-
+        // we use num as depending on the wrap boolean we may need more room in the array to specifiy the last vector
         int num;
 
         if (wrap) {
@@ -47,6 +46,7 @@ public class LineCollectionModelFactory {
 
         }
 
+        // Describes the index positions of the vertices of the lines
         int[] indices = new int[num * 2]; // size*2 as each line is connected by 2 vertices
 
 
@@ -69,8 +69,8 @@ public class LineCollectionModelFactory {
 
         }
 
-        System.out.println(Arrays.toString(vertices));
-        System.out.println(Arrays.toString(indices));
+        //System.out.println(Arrays.toString(vertices));
+        //System.out.println(Arrays.toString(indices));
 
         return new Model(vertices, indices, GL11.GL_LINE_STRIP);
 

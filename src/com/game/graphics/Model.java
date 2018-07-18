@@ -60,6 +60,13 @@ public class Model {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
+    public void delete() {
+
+        glDeleteBuffers(vID);
+        glDeleteBuffers(iID);
+
+    }
+
     public static FloatBuffer createFloatBuffer(float[] floats) {
 
         FloatBuffer buffer = BufferUtils.createFloatBuffer(floats.length);

@@ -9,22 +9,30 @@ import java.util.ArrayList;
 
 public class Polygon extends WorldObject {
 
-    Model model;
+    private Model model;
 
-    public Polygon(double mass, Vector2d position, ArrayList<Vector2d> vertices) {
+    Vector2d size;
+
+    public Polygon(Vector2d size, double mass, Vector2d position, ArrayList<Vector2d> vertices) {
         super(mass, position);
 
         this.model = ConvexPolygonModelFactory.makeModel(vertices);
 
         this.verticies = vertices;
 
+        this.size = size;
+
+
+
         this.colour.setColour(1, 1, 0);
+
     }
 
     @Override
     public void render(Renderer renderer) {
 
-        renderer.drawModel(100, 100, position.x, position.y, this.colour, 0, model);
+        renderer.drawModel(size.x, size.y, position.x, position.y, this.colour, 0, model);
 
     }
+
 }

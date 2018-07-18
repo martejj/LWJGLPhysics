@@ -2,6 +2,10 @@ package com.game.graphics;
 
 public class Colour {
 
+    public static final Colour RED = new Colour(1, 0, 0);
+    public static final Colour GREEN = new Colour(0, 1, 0);
+    public static final Colour BLUE = new Colour(0, 0, 1);
+
     float red;
     float green;
     float blue;

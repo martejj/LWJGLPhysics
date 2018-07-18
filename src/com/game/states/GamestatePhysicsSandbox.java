@@ -4,6 +4,8 @@ import com.game.Game;
 import com.game.graphics.Renderer;
 import com.game.world.World;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 public class GamestatePhysicsSandbox extends Gamestate{
 
     World world;
@@ -33,6 +35,11 @@ public class GamestatePhysicsSandbox extends Gamestate{
 
         world = new World();
         world.load(game);
+
+        glfwSetKeyCallback(game.getWindow(), (window, key, scancode, action, mods) -> {
+            if ( key == GLFW_KEY_0 && action == GLFW_RELEASE )
+                System.out.println("1");
+        });
 
     }
 
