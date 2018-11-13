@@ -60,6 +60,10 @@ public class Model {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
+    /**
+     * Needs to be called so we do not leak memory
+     */
+
     public void delete() {
 
         glDeleteBuffers(vID);

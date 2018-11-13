@@ -2,6 +2,7 @@ package com.game.world.objects;
 
 import com.game.graphics.Colour;
 import com.game.graphics.Renderer;
+import com.game.utils.VectorUtils;
 import com.game.world.World;
 import org.joml.*;
 
@@ -15,6 +16,8 @@ public class WorldObject {
     Vector2d velocity;
 
     Vector2d force;
+
+    Vector2d acceleration;
 
     Colour colour;
 
@@ -38,12 +41,12 @@ public class WorldObject {
     private ArrayList<Vector2d> vectorMesh = null;
 
     public WorldObject(double mass, Vector2d position) {
-
         this.position = position;
         this.velocity = new Vector2d();
         this.force = new Vector2d();
+        this.acceleration = new Vector2d();
 
-        this. verticies = new ArrayList<>();
+        this.verticies = new ArrayList<>();
 
         this.colour = new Colour();
 
@@ -63,10 +66,39 @@ public class WorldObject {
 
         vectorMesh = null;
 
+        this.acceleration.x = force.x/mass;
+        this.acceleration.y = force.y/mass;
+
+        this.velocity.add(acceleration);
+
+        this.position.add(velocity);
+
+    }
+
+    public void applyForce(Vector2d force) {
+
+        this.force.add(force);
+
     }
 
     public void render(Renderer renderer) {
 
+
+    }
+
+    // TODO fix up
+    public ArrayList<Vector2d> getVertices() {
+
+        ArrayList<Vector2d> ret = new ArrayList<>(verticies.size());
+
+        for (var vertex : verticies) {
+
+            ret.add(new Vector2d((vertex.x)*Math.cos(rotation) - (vertex.y)*Math.sin(rotation),
+                    (vertex.x)*Math.sin(rotation) + (vertex.y)*Math.cos(rotation)));
+
+        }
+
+        return ret;
 
     }
 
@@ -78,7 +110,7 @@ public class WorldObject {
 
         }
 
-        ArrayList<Vector2d> ret = new ArrayList<>();
+        ArrayList<Vector2d> ret = new ArrayList<>(verticies.size());
 
         for (var vertex : verticies) {
 
@@ -103,7 +135,7 @@ public class WorldObject {
 
         ArrayList<Vector2d> vertices = getPositionVertices();
 
-        ArrayList<Vector2d> vectors = new ArrayList<>();
+        ArrayList<Vector2d> vectors = new ArrayList<>(verticies.size());
 
         Vector2d first = null;
 
@@ -130,7 +162,7 @@ public class WorldObject {
         }
 
         // Finally add the last vector
-        vectors.add(new Vector2d(prev.x - first.x, prev.y - first.y));
+        vectors.add(new Vector2d(first.x - prev.x, first.y - prev.y));
 
         this.vectors = vectors;
 
@@ -150,14 +182,14 @@ public class WorldObject {
 
         }
 
-        ArrayList<Vector2d> normals = new ArrayList<>();
-
         ArrayList<Vector2d> vectors = getCounterClockwiseVectors();
+
+        ArrayList<Vector2d> normals = new ArrayList<>(vectors.size());
 
         for (var vector : vectors) {
 
             // Normal vector equals negative reciprocal. in this case we use -vector.x to get the right hand normal
-            normals.add(new Vector2d(vector.y, -vector.x));
+            normals.add(new Vector2d(vector.y, -vector.x).normalize());
 
         }
 
@@ -186,7 +218,7 @@ public class WorldObject {
 
         for (var vertex1 : positionVertices) {
 
-            for (var vertex2 : positionVertices.subList(i, positionVertices.size())) {
+            for (var vertex2 : positionVertices.subList(i + 1, positionVertices.size())) {
 
                 // Vector from 1 to 2 gives all of the counter clockwise vectors.
                 vectorMesh.add(new Vector2d(vertex2.x - vertex1.x, vertex2.y - vertex1.y));
@@ -197,17 +229,28 @@ public class WorldObject {
 
         }
 
-        // Adding the final vector from the last vertex to the first.
-
-        Vector2d last = positionVertices.get(positionVertices.size() - 1);
-
-        Vector2d first = positionVertices.get(0);
-
-        vectorMesh.add( new Vector2d(first.x - last.x, first.y - last.y));
-
         this.vectorMesh = vectorMesh;
 
         return vectorMesh;
+
+    }
+
+    public Vector2d getPosition() {
+
+        return position;
+
+    }
+
+    public void move(double x, double y) {
+
+        this.position.x = x;
+        this.position.y = y;
+
+    }
+
+    public void rotate(double angle) {
+
+        this.rotation = angle;
 
     }
 

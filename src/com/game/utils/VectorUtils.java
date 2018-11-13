@@ -113,4 +113,20 @@ public class VectorUtils {
 
     }
 
+    public static ArrayList<Vector2d> centralise(ArrayList<Vector2d> vectors) {
+
+        ArrayList<Vector2d> retVectors = new ArrayList<>();
+
+        Vector2d centre = getCentre(vectors);
+
+        for (var vec : vectors) {
+
+            retVectors.add(new Vector2d(vec).sub(centre));
+
+        }
+
+        return retVectors;
+
+    }
+
 }

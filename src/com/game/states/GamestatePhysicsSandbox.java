@@ -36,11 +36,6 @@ public class GamestatePhysicsSandbox extends Gamestate{
         world = new World();
         world.load(game);
 
-        glfwSetKeyCallback(game.getWindow(), (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_0 && action == GLFW_RELEASE )
-                System.out.println("1");
-        });
-
     }
 
     @Override

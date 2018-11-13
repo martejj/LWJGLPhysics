@@ -9,16 +9,19 @@ import com.game.world.CollisionManager;
 import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFW;
 
-import javax.sound.sampled.Line;
 import java.util.ArrayList;
 
 public class PolygonCreator {
 
+    public static final int STATUS_CREATE = 1;
+    public static final int STATUS_QUIT = 2;
+    public static final int STATUS_FINISH = 3;
+
+    private int status;
+
     private int mouseButtonCallbackID;
 
     private ArrayList<Vector2d> vertices;
-
-    private boolean finished;
 
     double connectionRadius = 10;
 
@@ -28,57 +31,77 @@ public class PolygonCreator {
 
     public void init(Game game) {
 
+        this.status = STATUS_CREATE;
+
         vertices = new ArrayList<>();
 
         mouseButtonCallbackID = game.getCurrMouseButtonCallback();
 
+        this.mouseX = game.getMouseX();
+
+        this.mouseY = game.getMouseY();
+
         game.mouseButtonCallbacks.put(mouseButtonCallbackID, (window, button, action, mods) -> {
-
-            this.mouseX = game.getMouseX();
-
-            this.mouseY = game.getMouseY();
 
             if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
 
-                if (vertices.size() >= 2) { // If we have enough vertices to make a triangle when we add this one
+                this.onLeftClick();
 
-                    if (CollisionManager.isWithinRadiusOf(mouseX, mouseY, connectionRadius, vertices.get(0).x, vertices.get(0).y)) {
+            } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT && action == GLFW.GLFW_RELEASE) {
 
-                        finished = true;
-
-                        System.out.println("finished");
-
-                    } else {
-
-                        System.out.println("new line segment");
-
-                        vertices.add(new Vector2d(mouseX, mouseY));
-
-                        if (lines != null) {
-
-                            lines.delete();
-
-                        }
-
-                        lines = LineCollectionModelFactory.makeModel(vertices, false);
-
-                    }
-
-                } else {
-
-                    System.out.println("new line segment 2");
-
-                    vertices.add(new Vector2d(game.getMouseX(), game.getMouseY()));
-
-                }
-
-            } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-
-                //TODO on right clicks
+                this.onRightClick();
 
             }
 
         });
+
+    }
+
+    private void onRightClick() {
+
+        if (vertices.size() - 1 < 0) {
+
+            this.status = STATUS_QUIT;
+
+        } else {
+
+            vertices.remove(vertices.size() - 1);
+
+            if (vertices.size() >= 1) {
+
+                updateLines();
+
+            } else {
+
+                lines = null;
+
+            }
+
+        }
+
+    }
+
+    private void onLeftClick() {
+
+        if (vertices.size() >= 1) { // If we have enough vertices to make a triangle when we add this one
+
+            if (CollisionManager.isWithinRadiusOf(mouseX, mouseY, connectionRadius, vertices.get(0).x, vertices.get(0).y)) {
+
+                this.status = STATUS_FINISH;
+
+            } else {
+
+                vertices.add(new Vector2d(mouseX, mouseY));
+
+                updateLines();
+
+            }
+
+        } else {
+
+            vertices.add(new Vector2d(this.mouseX, this.mouseY));
+
+        }
 
     }
 
@@ -100,11 +123,22 @@ public class PolygonCreator {
 
             Model currentLines = LineCollectionModelFactory.makeModel(currentLineVertices, false);
 
-            currentLines.render();
+            if (currentLines != null) {
 
-            currentLines.delete();
+                renderer.drawModel(Colour.BLUE, currentLines);
+
+                currentLines.delete();
+
+            }
 
         }
+
+    }
+
+    public void update(Game game) {
+
+        this.mouseY = game.getMouseY();
+        this.mouseX = game.getMouseX();
 
     }
 
@@ -114,13 +148,25 @@ public class PolygonCreator {
 
         game.mouseButtonCallbacks.remove(mouseButtonCallbackID);
 
-        return vertices;
+        return (ArrayList<Vector2d>) vertices.clone();
 
     }
 
-    public boolean isFinished() {
+    public int getStatus() {
 
-        return finished;
+        return status;
+
+    }
+
+    private void updateLines() {
+
+        if (lines != null) {
+
+            lines.delete();
+
+        }
+
+        lines = LineCollectionModelFactory.makeModel(vertices, false);
 
     }
 

@@ -93,7 +93,8 @@ public class Renderer {
         Matrix4f projection = new Matrix4f()
                 .ortho2D((float) -x, (float) (this.getInitialWidth() - x), (float) -y, (float) (this.getInitialHeight() - y));
 
-        Matrix4f scale = new Matrix4f().scaling((float) width, (float) height, 1);
+        // Need to divide by two as we scale by this number in both up and down and left and right directions
+        Matrix4f scale = new Matrix4f().scaling((float) width/2, (float) height/2, 1);
 
         Matrix4f rotation = new Matrix4f().rotation(new AxisAngle4f().rotate((float) angle));
 

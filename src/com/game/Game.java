@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 import org.lwjgl.glfw.GLFWScrollCallbackI;
 
 import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -79,16 +80,6 @@ public class Game {
 
         });
 
-        glfwSetKeyCallback(getWindow(), (window, key, scancode, action, mods) -> {
-
-            for (var callback : this.keyCallbacks.values()) {
-
-                callback.invoke(window, key, scancode, action, mods);
-
-            }
-
-        });
-
         glfwSetScrollCallback(getWindow(), (window, xoffset, yoffset) -> {
 
             for (var callback : this.scrollCallbacks.values()) {
@@ -109,9 +100,24 @@ public class Game {
 
         });
 
+        glfwSetKeyCallback(getWindow(), (window, key, scancode, action, mods) -> {
+
+            for (var callback : this.keyCallbacks.values()) {
+
+                callback.invoke(window, key, scancode, action, mods);
+
+            }
+
+        });
+
     }
 
     public void update() {
+        /*try{
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+
+        }*/
 
         state.update(this);
 
